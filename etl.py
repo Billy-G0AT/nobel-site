@@ -1,5 +1,5 @@
 from collections import Counter
-import requests
+import requests, boto3
 
 response = requests.get("https://api.nobelprize.org/2.1/laureates")
 
@@ -9,6 +9,8 @@ data = response.json()
 countries = []
 money = []
 categories = []
+
+############################# EXTRACT #########################################
 
 # Iterates Through Each Laureate and Gets Wanted Values Only If They Exist
 for laureate in data["laureates"]:
@@ -30,6 +32,7 @@ for laureate in data["laureates"]:
     else:
         continue
 
+############################# TRANSFER ########################################
 
 # Sorts Data Into Ranked Arrays
 country_count = Counter(countries)
@@ -53,7 +56,38 @@ first_category = most_category[0][0]
 second_category = most_category[1][0]
 third_category = most_category[2][0]
 
-first_places = [first_country, first_money, first_category]
+############################# LOAD ############################################
 
-print(first_places)
+dynamodb = boto3.resource("dynamodb")
 
+table = dynamodb.Table("nobel")
+
+# Updates Countries
+table.put_item(
+   Item={
+        'rank': 'countries',
+        'first': first_country,
+        'second': second_country,
+        'third': third_country,
+    }
+)
+
+# Updates Money
+table.put_item(
+   Item={
+        'rank': 'money',
+        'first': first_money,
+        'second': second_money,
+        'third': third_money,
+    }
+)
+
+# Updates Categories
+table.put_item(
+   Item={
+        'rank': 'categories',
+        'first': first_category,
+        'second': second_category,
+        'third': third_category,
+    }
+)
