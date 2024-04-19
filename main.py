@@ -15,6 +15,7 @@ def home():
 	most_country = response_countries["Item"]["first"]
 	most_money = response_money["Item"]["first"]
 	most_category = response_categories["Item"]["first"]
+	
 	return render_template(
 		"index.html",
 		most_country = most_country,
