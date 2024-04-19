@@ -1,12 +1,20 @@
 from flask import Flask, render_template
+import boto3
+
+dynamodb = boto3.resource("dynamodb")
+table = dynamodb.Table("nobel")
 
 app = Flask(__name__)
 
 @app.route("/")
 def home():
-	most_country = "1"
-	most_money = "2"
-	most_category = "3"
+	response_countries = table.get_item(Key ={"rank": "countries"})
+	response_money = table.get_item(Key ={"rank": "money"})
+	response_categories = table.get_item(Key ={"rank": "categories"})
+
+	most_country = response_countries["Item"]["first"]
+	most_money = response_money["Item"]["first"]
+	most_category = response_categories["Item"]["first"]
 	return render_template(
 		"index.html",
 		most_country = most_country,
