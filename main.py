@@ -1,10 +1,10 @@
 from flask import Flask, render_template
 import boto3
 
+app = Flask(__name__)
+
 dynamodb = boto3.resource("dynamodb")
 table = dynamodb.Table("nobel")
-
-app = Flask(__name__)
 
 @app.route("/")
 def home():
