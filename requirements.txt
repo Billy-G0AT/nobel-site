@@ -1,0 +1,4 @@
+boto3==1.26.160
+Flask==3.0.3
+Flask_Caching==2.1.0
+Requests==2.31.0

@@ -32,7 +32,7 @@ for laureate in data["laureates"]:
     else:
         continue
 
-############################# TRANSFER ########################################
+############################# TRANSFORM ########################################
 
 # Sorts Data Into Ranked Arrays
 country_count = Counter(countries)
